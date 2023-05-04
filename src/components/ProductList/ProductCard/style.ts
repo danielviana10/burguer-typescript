@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const StyledProductCard = styled.li`
   border: 2px solid ${({ theme }) => theme.colors.gray100};

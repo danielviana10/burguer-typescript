@@ -1,10 +1,26 @@
-import ProductCard from './ProductCard';
-import { StyledProductList } from './style';
+import { useContext } from "react";
+import { ProductCard } from "./ProductCard";
+import { StyledProductList } from "./style";
+import { CartContext } from "../../providers/CartContext";
 
-const ProductList = () => (
-  <StyledProductList>
-    <ProductCard />
-  </StyledProductList>
-);
+export const ProductList = () => {
+  const { productList, filter } = useContext(CartContext);
 
-export default ProductList;
+  const currentFilterList = productList.filter(
+    (product) =>
+      product.name.toLowerCase().includes(filter) ||
+      product.category.toLowerCase().includes(filter)
+  );
+  
+  const currentProductList =
+    filter !== "" && filter !== undefined ? currentFilterList : productList;
+
+  return (
+    <StyledProductList>
+      {currentProductList?.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+      ;
+    </StyledProductList>
+  );
+};
