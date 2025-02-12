@@ -1,12 +1,12 @@
 import { StyledIllustrationBox } from "./style";
-import LogoKenzieBurguer from "../../assets/LogoKenzieBurguer.svg";
+import BurguerLogo from '../../assets/burguer-logo.png';
 import BallsIllustration from "../../assets/BallsIllustrations.svg";
 import Icon from "../../assets/Icon.svg";
 import { StyledParagraph } from "../../styles/typography";
 
 export const IllustrationBox = () => (
   <StyledIllustrationBox>
-    <img src={LogoKenzieBurguer} alt="Logo Kenzie Burguer" />
+    <img src={BurguerLogo} alt="Logo Kenzie Burguer"/>
 
     <div className="styledBox">
       <img src={Icon} alt="Ícone de cesta de compras" />

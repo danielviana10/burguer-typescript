@@ -1,5 +1,5 @@
 import { MdShoppingCart, MdLogout } from "react-icons/md";
-import LogoKenzieBurguer from "../../assets/LogoKenzieBurguer.svg";
+import LogoBurguer from "../../assets/burguer-logo.png";
 
 import { SearchForm } from "./SearchForm";
 import { StyledHeader } from "./style";
@@ -17,7 +17,7 @@ export const Header = () => {
       <StyledContainer containerWidth={1300}>
         <div className="flexGrid">
           <img
-            src={LogoKenzieBurguer}
+            src={LogoBurguer}
             alt="Kenzie Burguer Logo"
             className="logo"
           />

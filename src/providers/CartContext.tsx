@@ -71,6 +71,7 @@ export const CartProvider = ({ children }: ICartProviderProps) => {
   
   const removeCardToList = (idProduct: number) => {
     const checkIdToList = count.filter((card) => card.id === idProduct);
+    toast.warn(`${checkIdToList[0].name} removido do carrinho!`);
     setCount((count) => {
       const indexCount = count.findIndex((element) => element.id === idProduct);
       const indexCartList = cartList.findIndex(
@@ -109,6 +110,7 @@ export const CartProvider = ({ children }: ICartProviderProps) => {
 
   const addCardToList = (newProduct: IProduct) => {
     const checkIdToList = cartList?.find((card) => card.id == newProduct.id);
+    toast.success(`${newProduct.name} adicionado ao carrinho!`);
     if (cartList?.length > 0) {
       cartList.forEach((card) => {
         if (checkIdToList) {

@@ -34,6 +34,11 @@ interface IUserLoginResponse {
   user: IUser;
 }
 
+interface IUserLoginPassword {
+  email: string;
+  password: string;
+}
+
 interface IUserRegisterResponse {
   accessToken: string;
   user: IUser;
@@ -91,21 +96,30 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
   ) => {
     try {
       setLoading(true);
-      const { data } = await api.post<IUserLoginResponse>("/login", formData);
-      localStorage.setItem("@TOKEN", data.accessToken);
-      localStorage.setItem("@USERID", JSON.stringify(data.user.id));
-      setUser(data.user);
-      navigate("/shop");
-    } 
-    catch (error) {
-      const Ierror = error as IAxiosError;
-      toast.error(Ierror.message);
+  
+      const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+  
+      const foundUser = storedUsers.find(
+        (user: IUserLoginPassword) => user.email === formData.email && user.password === formData.password
+      );
+  
+      if (foundUser) {
+        localStorage.setItem("@TOKEN", "fakeToken123");
+        localStorage.setItem("@USERID", JSON.stringify(foundUser.id));
+        setUser(foundUser);
+        navigate("/shop");
+        toast.success("Login bem-sucedido!");
+      } else {
+        toast.error("Email ou senha incorretos!");
+      }
+    } catch (error) {
+      toast.error("Erro ao tentar logar!");
       console.log(error);
-    } 
-    finally {
+    } finally {
       setLoading(false);
     }
   };
+  
 
 
   const userRegister = async (
@@ -114,16 +128,33 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
   ) => {
     try {
       setLoading(true);
-      await api.post<IUserRegisterResponse>("/users", formData);
-      console.log("Cadastro efetuado com sucesso");
-      navigate("/");
+  
+      const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+  
+      const userExists = storedUsers.some((user: IUser) => user.email === formData.email);
+  
+      if (userExists) {
+        toast.error("Email já cadastrado!");
+      } else {
+        const newUser = {
+          id: storedUsers.length + 1,
+          email: formData.email,
+          password: formData.password,
+        };
+        storedUsers.push(newUser);
+  
+        localStorage.setItem("users", JSON.stringify(storedUsers));
+        toast.success("Cadastro efetuado com sucesso!");
+        navigate("/");
+      }
     } catch (error) {
-      const Ierror = error as IAxiosError;
-      console.log(Ierror);
+      toast.error("Erro ao tentar cadastrar!");
+      console.log(error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const userLogout = () => {
     localStorage.removeItem("@TOKEN");
