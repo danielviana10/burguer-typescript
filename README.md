@@ -1,3 +1,8 @@
-Acesse o deploy do vercel: https://projeto-hamburgueria-2-0-eight.vercel.app/
-Clique em Cadastrar para criar sua conta, seu nome deve conter 3 caracteres ou mais, seu e-mail deve ser válido e
-sua senha deve conter pelo menos 8 caracteres, uma letra maiúscula, minúscula, números e um caracter especial.
+Projeto de Hamburgueria React TypeScript.
+A API de registro e login do usuário está fora do ar, por isso os dados ficarão salvos no local storage.
+
+Primeiro crie sua conta clicando em Cadastrar, preencha com os dados necessários.
+
+Após você será redirecionado para a página de login, realize o login com os mesmos dados.
+
+Quer clonar o projeto? Após o clone, instale as dependências com o comando npm i, rode com npm run dev e teste.
