@@ -4,6 +4,7 @@ import { TLoginFormValues } from "../components/Form/LoginForm/loginSchema";
 import { TRegisterFormValues } from "../components/Form/RegisterForm/registerSchema";
 import { api } from "../services/api";
 import { toast } from "react-toastify";
+import bcrypt from "bcryptjs";
 import "react-toastify/dist/ReactToastify.css";
 
 interface IUserProviderProps {
@@ -98,19 +99,19 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
       setLoading(true);
   
       const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+      const foundUser = storedUsers.find((user: IUser) => user.email === formData.email);
   
-      const foundUser = storedUsers.find(
-        (user: IUserLoginPassword) => user.email === formData.email && user.password === formData.password
-      );
-  
-      if (foundUser) {
+      if (!foundUser) {
+        toast.error("Usuário não encontrado!");
+      } else if (!bcrypt.compareSync(formData.password, foundUser.password)) {
+        toast.error("Email ou senha incorretos!");
+      } else {
         localStorage.setItem("@TOKEN", "fakeToken123");
         localStorage.setItem("@USERID", JSON.stringify(foundUser.id));
         setUser(foundUser);
         navigate("/shop");
         toast.success("Login bem-sucedido!");
-      } else {
-        toast.error("Email ou senha incorretos!");
       }
     } catch (error) {
       toast.error("Erro ao tentar logar!");
@@ -136,11 +137,15 @@ export const UserProvider = ({ children }: IUserProviderProps) => {
       if (userExists) {
         toast.error("Email já cadastrado!");
       } else {
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(formData.password, salt);
+  
         const newUser = {
           id: storedUsers.length + 1,
           email: formData.email,
-          password: formData.password,
+          password: hashedPassword,
         };
+  
         storedUsers.push(newUser);
   
         localStorage.setItem("users", JSON.stringify(storedUsers));
